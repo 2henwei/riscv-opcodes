@@ -6,6 +6,7 @@ from builtins import range
 import math
 import sys
 import tokenize
+import json
 from collections import OrderedDict
 
 namelist = []
@@ -1011,6 +1012,14 @@ def make_go():
   print('\treturn nil, false')
   print('}')
 
+def make_json():
+  outputs = []
+  for name in namelist:
+    outputs.append(OrderedDict({ "mnemonic":    name,
+                                 "form":        "R",
+                                 "stencil":     str(hex(match[name]))}))
+  json.dump(outputs, sys.stdout, indent=4)
+
 def parse_inputs(args):
   inputs = []
   for fn in args:
@@ -1106,5 +1115,7 @@ if __name__ == "__main__":
     make_c(match,mask)
   elif sys.argv[1] == '-go':
     make_go()
+  elif sys.argv[1] == '-json':
+    make_json()
   else:
     assert 0
